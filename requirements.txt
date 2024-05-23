@@ -6,3 +6,4 @@ pandas
 DateTime
 streamlit-timeline
 matplotlib
+bcrypt
