@@ -98,22 +98,14 @@ def main(username):
             delete_date = st.date_input("Datum zu löschen", format="YYYY/MM/DD")
             if st.button("Eintrag löschen"):
             # Find and drop the entry with the specified date
-               if delete_date in mama_weights_df["Datum"].values:
-                        mama_weights_df = mama_weights_df[mama_weights_df["Datum"] != delete_date]
-                        github.write_df(file_name, mama_weights_df, "Eintrag gelöscht")
+               if delete_date in weights_df["Datum"].values:
+                        weights_df = mama_weights_df[weights_df["Datum"] != delete_date]
+                        github.write_df(file_name, weights_df, "Eintrag gelöscht")
                         st.success("Eintrag gelöscht!")
                else:
                         st.error("Kein Eintrag mit diesem Datum gefunden.")
             else:
                st.write("Keine Gewichtsdaten vorhanden.")
-
-
-    st.subheader('Gewichtsdaten')
-    if github.file_exists(f"weights_{file_suffix}.csv"):
-        weights_df = github.read_df(f"weights_{file_suffix}.csv")
-        st.write(weights_df)
-    else:
-        st.write("Noch keine Gewichtsdaten vorhanden.")
 
     st.write('Blutwert')
     blutwerte_text = st.text_area("Blutzuckerwerte")
