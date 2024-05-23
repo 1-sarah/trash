@@ -11,4 +11,5 @@ st.set_page_config(page_title="mamasjourney", page_icon=':ship:', layout="wide")
 # Verbindung zu GitHub initialisieren
 
 st.title('mamasjourney :ship:')
-st.header('Herzlich Willkommen bei deinem eigenen Schwangerschaftstagebuch')
+st.subheader('Herzlich Willkommen bei deinem eigenen Schwangerschaftstagebuch')
+
