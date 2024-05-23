@@ -1,0 +1,17 @@
+credentials:
+  usernames:
+    mama1:
+      email: mama1@a.com
+      name: Mama 1
+      password: '$2b$12$ePtGB3C.L9age58zbvCaf.nuqm4gTx0xqKpy0vTb2bQws8WVJIsNi'
+    mama2:
+      email: mama2@a.com
+      name: Mama 2
+      password: '$2b$12$nytUS/fx7/7zFG0aTQGQ8u7Ddemub9GsJoqVmti4eCtxMrjWiu9J2'
+cookie:
+  expiry_days: 30
+  key: fsdahgreghdsfahsahgdsafsda
+  name: random_cookie_name
+preauthorized:
+  emails:
+  - fdsafsa@a.com
