@@ -58,9 +58,10 @@ def baby_main(username):
     file_suffix = username
     st.header('Baby :ship:')
     st.subheader('Ideen Babyname')
+    babyname_date = st.date_input("Datum", value=datetime.today(), max_value=datetime.today(), format="YYYY/MM/DD")
     baby_name_text = st.text_area("Babyname")
     if st.button("Name speichern"):
-        new_row = pd.DataFrame({"Datum": [weight_date], "Babyname": [baby_name_text]})
+        new_row = pd.DataFrame({"Datum": [babyname_date], "Babyname": [baby_name_text]})
         file_name = f"baby_name_{file_suffix}.csv"
         if github.file_exists(file_name):
             babyname_df = github.read_df(file_name)
