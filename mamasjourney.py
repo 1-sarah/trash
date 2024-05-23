@@ -1,5 +1,5 @@
-import yaml
 import streamlit as st
+import yaml
 from yaml.loader import SafeLoader
 import streamlit_authenticator as stauth
 import pandas as pd
@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 from github_contents import GithubContents
 
 # Page Configuration
-st.set_page_config(page_title="mamasjourney", page_icon=':ship:', layout="wide",)
+st.set_page_config(page_title="mamasjourney", page_icon=':ship:', layout="wide")
 
 # Import pages
 from pages import mama, baby, statistiken, links
@@ -25,4 +25,5 @@ st.sidebar.title("Navigation")
 page_selection = st.sidebar.selectbox("Select a page", options=list(pages.keys()))
 
 # Call the selected page function
-pages[page_selection]()
+selected_page = pages[page_selection]
+selected_page.show()
