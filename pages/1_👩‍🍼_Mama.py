@@ -129,7 +129,7 @@ def registration():
             st.error("Benutzername existiert bereits. Bitte versuchen Sie einen Anderen.")
         else:
             # Add new user to YAML file
-            config['credentials'][username] = password
+            config['credentials'][username] = [password]
             with open('./config.yaml', 'w') as file:
                 yaml.dump(config, file)
             st.success("Registration successful. You can now login.")
