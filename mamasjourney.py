@@ -43,7 +43,6 @@ st.sidebar.title("Navigation")
 page_selection = st.sidebar.selectbox("Select a page", options=list(pages.keys()))
 # Call the selected page function
 selected_page = pages[page_selection]
-selected_page.show()
 
 # Authentication and visualizing the elements
 name, authentication_status, username = authenticator.login()
