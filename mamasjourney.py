@@ -75,6 +75,7 @@ def main(username):
 
     if github.file_exists(file_name):
         weights_df = github.read_df(file_name)
+        weights_df["Datum"] = pd.to_datetime(weights_df["Datum"])
     else:
         weights_df = pd.DataFrame(columns=["Datum", "Gewicht (kg)"])
 
