@@ -12,3 +12,5 @@ st.set_page_config(page_title="mamasjourney", page_icon=':ship:', layout="wide")
 
 st.title('mamasjourney :ship:')
 st.subheader('Herzlich Willkommen bei deinem eigenen Schwangerschaftstagebuch')
+st.button('Login')
+st.button('Registrierung')
