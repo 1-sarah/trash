@@ -120,7 +120,7 @@ authenticator = stauth.Authenticate(
 
 def registration():
     st.subheader("Registrierung")
-    new_username = st.text_input("Neuer Benutzername", type='username')
+    new_username = st.text_input("Neuer Benutzername")
     new_password = st.text_input("Neues Passwort", type="password")
 
     if st.button("Registrierung"):
