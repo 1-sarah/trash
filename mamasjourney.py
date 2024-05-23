@@ -70,23 +70,48 @@ def main(username):
         df_calendar_weeks = pd.DataFrame(calendar_weeks_data)
         st.write(df_calendar_weeks)
 
+    # Initialize or read the existing data from the CSV file
+    file_name = f"weights_{file_suffix}.csv"
+
+    if github.file_exists(file_name):
+        weights_df = github.read_df(file_name)
+    else:
+        weights_df = pd.DataFrame(columns=["Datum", "Gewicht (kg)"])
+
+    # Input section for adding a new weight
     st.write('Gewicht')
-    mama_weight_date = st.date_input("Datum", value=datetime.today(), min_value=last_period_date, max_value=datetime.today(), format="YYYY/MM/DD")
-    mama_weight = st.number_input("Gewicht (kg)", min_value=0.0)
+    weight_date = st.date_input("Datum", value=datetime.today(), format="YYYY/MM/DD")
+    weight = st.number_input("Gewicht (kg)", min_value=0.0)
+
     if st.button("Gewicht speichern"):
-        new_row = pd.DataFrame({"Datum": [mama_weight_date], "Gewicht (kg)": [mama_weight]})
-        file_name = f"mama_weights_{file_suffix}.csv"
-        if github.file_exists(file_name):
-            mama_weights_df = github.read_df(file_name)
-            mama_weights_df = pd.concat([mama_weights_df, new_row], ignore_index=True)
-        else:
-            mama_weights_df = new_row.copy()
+        new_row = pd.DataFrame({"Datum": [weight_date], "Gewicht (kg)": [weight]})
+        weights_df = pd.concat([mama_weights_df, new_row], ignore_index=True)
         github.write_df(file_name, mama_weights_df, "Speicher Gewicht")
+        st.success("Gewicht gespeichert!")
+
+        # Display the current data and allow deletion of an entry
+        st.write("Aktuelle Gewichtsdaten")
+    if not weights_df.empty:
+            st.dataframe(weights_df)
+
+            # Select the entry to delete
+            delete_date = st.date_input("Datum zu löschen", format="YYYY/MM/DD")
+            if st.button("Eintrag löschen"):
+            # Find and drop the entry with the specified date
+               if delete_date in mama_weights_df["Datum"].values:
+                        mama_weights_df = mama_weights_df[mama_weights_df["Datum"] != delete_date]
+                        github.write_df(file_name, mama_weights_df, "Eintrag gelöscht")
+                        st.success("Eintrag gelöscht!")
+               else:
+                        st.error("Kein Eintrag mit diesem Datum gefunden.")
+            else:
+               st.write("Keine Gewichtsdaten vorhanden.")
+
 
     st.subheader('Gewichtsdaten')
-    if github.file_exists(f"mama_weights_{file_suffix}.csv"):
-        mama_weights_df = github.read_df(f"mama_weights_{file_suffix}.csv")
-        st.write(mama_weights_df)
+    if github.file_exists(f"weights_{file_suffix}.csv"):
+        weights_df = github.read_df(f"weights_{file_suffix}.csv")
+        st.write(weights_df)
     else:
         st.write("Noch keine Gewichtsdaten vorhanden.")
 
@@ -94,17 +119,17 @@ def main(username):
     blutwerte_text = st.text_area("Blutzuckerwerte")
     if st.button("Blutwert speichern"):
         new_row = pd.DataFrame({"Datum": [mama_weight_date], "Blutzuckerwert (in mg/dL)": [blutwerte_text]})
-        file_name = f"mama_blutwert_{file_suffix}.csv"
+        file_name = f"blutwert_{file_suffix}.csv"
         if github.file_exists(file_name):
-            mama_blutwert_df = github.read_df(file_name)
-            mama_blutwert_df = pd.concat([mama_blutwert_df, new_row], ignore_index=True)
+            blutwert_df = github.read_df(file_name)
+            blutwert_df = pd.concat([blutwert_df, new_row], ignore_index=True)
         else:
             mama_blutwert_df = new_row.copy()
         github.write_df(file_name, mama_blutwert_df, "Speicher Blutzuckerwert")
 
     st.subheader('Blutzuckerwert')
     if github.file_exists(f"mama_blutwert_{file_suffix}.csv"):
-        mama_blutwert_df = github.read_df(f"mama_blutwert_{file_suffix}.csv")
+        mama_blutwert_df = github.read_df(f"blutwert_{file_suffix}.csv")
         st.write(mama_blutwert_df)
     else:
         st.write("Noch keine Blutzuckerwerte vorhanden.")
