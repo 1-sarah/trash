@@ -130,14 +130,14 @@ def registration():
             config = yaml.load(file, Loader=SafeLoader)
 
         # Check if username already exists
-        if new_username in config['credentials']:
+        if new_username in config['credentials']['usernames']:
             st.error("Username already exists. Please choose a different one.")
         else:
             # Hash the password
             hashed_password = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
 
             # Add new user to YAML file with hashed password
-            config['credentials'][new_username] = {
+            config['credentials']['usernames'][new_username] = {
                 'email': '',  # You can add email field if needed
                 'name': '',   # You can add name field if needed
                 'password': hashed_password
