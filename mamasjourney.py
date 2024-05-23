@@ -99,7 +99,7 @@ def main(username):
             if st.button("Eintrag löschen"):
             # Find and drop the entry with the specified date
                if delete_date in weights_df["Datum"].values:
-                        weights_df = mama_weights_df[weights_df["Datum"] != delete_date]
+                        weights_df = weights_df[weights_df["Datum"] != delete_date]
                         github.write_df(file_name, weights_df, "Eintrag gelöscht")
                         st.success("Eintrag gelöscht!")
                else:
