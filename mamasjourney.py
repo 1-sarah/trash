@@ -25,29 +25,26 @@ authenticator = stauth.Authenticate(
     config['preauthorized']
 )
 
-# Define the main show function
-def show():
-    # Page Configuration
-    st.set_page_config(page_title="mamasjourney", page_icon=':ship:', layout="wide")
+# Page Configuration
+st.set_page_config(page_title="mamasjourney", page_icon=':ship:', layout="wide")
 
-    # Import pages
-    from pages import mama, baby, statistiken, links
+# Import pages
+from pages import mama, baby, statistiken, links
 
-    # Create a dictionary mapping page names to functions
-    pages = {
-        "Mama": mama,
-        "Baby": baby,
-        "Statistiken": statistiken,
-        "Weiterführende Links": links
-    }
+# Create a dictionary mapping page names to functions
+pages = {
+    "Mama": mama,
+    "Baby": baby,
+    "Statistiken": statistiken,
+    "Weiterführende Links": links
+}
 
-    # Add a selectbox in the sidebar for page navigation
-    st.sidebar.title("Navigation")
-    page_selection = st.sidebar.selectbox("Select a page", options=list(pages.keys()))
-
-    # Call the selected page function
-    selected_page = pages[page_selection]
-    selected_page.show()
+# Add a selectbox in the sidebar for page navigation
+st.sidebar.title("Navigation")
+page_selection = st.sidebar.selectbox("Select a page", options=list(pages.keys()))
+# Call the selected page function
+selected_page = pages[page_selection]
+selected_page.show()
 
 # Authentication and visualizing the elements
 name, authentication_status, username = authenticator.login()
