@@ -30,13 +30,7 @@ def show():
     # Import pages
     from pages import mama, baby, statistiken, links
     # Create a dictionary mapping page names to functions
-    pages = {
-        "Mama": mama,
-        "Baby": baby,
-        "Statistiken": statistiken,
-        "Weiterführende Links": links
-    }
-
+    
     # Add a selectbox in the sidebar for page navigation
     st.sidebar.title("Navigation")
     page_selection = st.sidebar.selectbox("Select a page", options=list(pages.keys()))
