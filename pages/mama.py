@@ -100,13 +100,3 @@ def show():
             st.write(tagebuch_df)
         else:
             st.write("Noch keine Tagebucheinträge vorhanden.")
-
-    name, authentication_status, username = authenticator.login()
-
-    if authentication_status:
-        authenticator.logout('Logout', 'main')
-        main(username)
-    elif authentication_status == False:
-        st.error('Username/password is incorrect')
-    elif authentication_status == None:
-        st.warning('Please enter your username and password')
