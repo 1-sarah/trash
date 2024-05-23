@@ -52,7 +52,7 @@ if authentication_status:
     authenticator.logout('Logout', 'main')
     st.write(f'Welcome *{name}*')
     st.header('Statistiken :ship:')
-    plot_graph(f'weights_{username}.csv', 'Gewichtsverlauf', 'kg')
+    plot_graph(f'weight_{username}.csv', 'Gewichtsverlauf', 'kg')
     plot_graph(f'blutwert_{username}.csv', 'Blutzuckerwerte Verlauf', 'mg/dL')
 elif authentication_status == False:
     st.error('Username/password is incorrect')
