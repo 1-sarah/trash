@@ -119,17 +119,17 @@ authenticator = stauth.Authenticate(
 )
 
 def registration():
-    st.header("Registration")
-    new_username = st.text_input("New Username")
-    new_password = st.text_input("New Password", type="password")
+    st.subheader("Registrierung")
+    new_username = st.text_input("Neuer Benutzername", type='username')
+    new_password = st.text_input("Neues Passwort", type="password")
 
-    if st.button("Register"):
+    if st.button("Registrierung"):
         # Check if username already exists
         if new_username in config['credentials']:
-            st.error("Username already exists. Please choose a different one.")
+            st.error("Benutzername existiert bereits. Bitte versuchen Sie einen Anderen.")
         else:
             # Add new user to YAML file
-            config['credentials'][new_username] = new_password
+            config['credentials'][username] = password
             with open('./config.yaml', 'w') as file:
                 yaml.dump(config, file)
             st.success("Registration successful. You can now login.")
