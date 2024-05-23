@@ -85,8 +85,8 @@ def main(username):
 
     if st.button("Gewicht speichern"):
         new_row = pd.DataFrame({"Datum": [weight_date], "Gewicht (kg)": [weight]})
-        weights_df = pd.concat([mama_weights_df, new_row], ignore_index=True)
-        github.write_df(file_name, mama_weights_df, "Speicher Gewicht")
+        weights_df = pd.concat([weights_df, new_row], ignore_index=True)
+        github.write_df(file_name, weights_df, "Speicher Gewicht")
         st.success("Gewicht gespeichert!")
 
         # Display the current data and allow deletion of an entry
