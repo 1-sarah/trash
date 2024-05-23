@@ -70,67 +70,42 @@ def main(username):
         df_calendar_weeks = pd.DataFrame(calendar_weeks_data)
         st.write(df_calendar_weeks)
 
-    # Initialize or read the existing data from the CSV file
-    file_name = f"weights_{file_suffix}.csv"
-
-    if github.file_exists(file_name):
-        weights_df = github.read_df(file_name)
-        weights_df["Datum"] = pd.to_datetime(weights_df["Datum"])
-    else:
-        weights_df = pd.DataFrame(columns=["Datum", "Gewicht (kg)"])
-
-    # Input section for adding a new weight
     st.write('Gewicht')
-    weight_date = st.date_input("Datum", value=datetime.today(), format="YYYY/MM/DD")
+    weight_date = st.date_input("Datum", value=datetime.today(), max_value=datetime.today(), format="YYYY/MM/DD")
     weight = st.number_input("Gewicht (kg)", min_value=0.0)
-
     if st.button("Gewicht speichern"):
         new_row = pd.DataFrame({"Datum": [weight_date], "Gewicht (kg)": [weight]})
-        weights_df = pd.concat([weights_df, new_row], ignore_index=True)
-        github.write_df(file_name, weights_df, "Speicher Gewicht")
-        st.success("Gewicht gespeichert!")
-
-        # Display the current data and allow deletion of an entry
-        st.write("Aktuelle Gewichtsdaten")
-    if not weights_df.empty:
-            st.dataframe(weights_df)
-
-            # Select the entry to delete
-            delete_date = st.date_input("Datum zu löschen", format="YYYY/MM/DD")
-            if st.button("Eintrag löschen"):
-            # Find and drop the entry with the specified date
-               if delete_date in weights_df["Datum"].values:
-                        weights_df = weights_df[weights_df["Datum"] != delete_date]
-                        github.write_df(file_name, weights_df, "Eintrag gelöscht")
-                        st.success("Eintrag gelöscht!")
-               else:
-                        st.error("Kein Eintrag mit diesem Datum gefunden.")
-            else:
-               st.write("Keine Gewichtsdaten vorhanden.")
+        file_name = f"weight_{file_suffix}.csv"
+        if github.file_exists(file_name):
+            weight_df = github.read_df(file_name)
+            weight_df = pd.concat([weight_df, new_row], ignore_index=True)
+        else:
+            weight_df = new_row.copy()
+        github.write_df(file_name, weight_df, "Speicher Gewicht")
 
     st.write('Blutwert')
     blutwerte_text = st.text_area("Blutzuckerwerte")
     if st.button("Blutwert speichern"):
-        new_row = pd.DataFrame({"Datum": [mama_weight_date], "Blutzuckerwert (in mg/dL)": [blutwerte_text]})
+        new_row = pd.DataFrame({"Datum": [weight_date], "Blutzuckerwert (in mg/dL)": [blutwerte_text]})
         file_name = f"blutwert_{file_suffix}.csv"
         if github.file_exists(file_name):
             blutwert_df = github.read_df(file_name)
             blutwert_df = pd.concat([blutwert_df, new_row], ignore_index=True)
         else:
-            mama_blutwert_df = new_row.copy()
-        github.write_df(file_name, mama_blutwert_df, "Speicher Blutzuckerwert")
+            blutwert_df = new_row.copy()
+        github.write_df(file_name, blutwert_df, "Speicher Blutzuckerwert")
 
     st.subheader('Blutzuckerwert')
-    if github.file_exists(f"mama_blutwert_{file_suffix}.csv"):
-        mama_blutwert_df = github.read_df(f"blutwert_{file_suffix}.csv")
-        st.write(mama_blutwert_df)
+    if github.file_exists(f"blutwert_{file_suffix}.csv"):
+        blutwert_df = github.read_df(f"blutwert_{file_suffix}.csv")
+        st.write(blutwert_df)
     else:
         st.write("Noch keine Blutzuckerwerte vorhanden.")
                 
     st.header('Tagebuch')
     tagebuch_text = st.text_area("Tagebuch")
     if st.button("Eintrag speichern"):
-        new_row = pd.DataFrame({"Date": [mama_weight_date], "Tagebuch": [tagebuch_text]})
+        new_row = pd.DataFrame({"Date": [weight_date], "Tagebuch": [tagebuch_text]})
         file_name = f"tagebuch_{file_suffix}.csv"
         if github.file_exists(file_name):
             tagebuch_df = github.read_df(file_name)
