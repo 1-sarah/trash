@@ -6,9 +6,6 @@ import pandas as pd
 from datetime import datetime, timedelta
 from github_contents import GithubContents
 
-# Page Configuration
-st.set_page_config(page_title="mamasjourney", page_icon=':ship:', layout="wide",)
-
 # Verbindung zu GitHub initialisieren
 github = GithubContents(
             st.secrets["github"]["owner"],
