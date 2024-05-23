@@ -46,7 +46,7 @@ if authentication_status:
     main(username)
 elif authentication_status == False:
     st.error('Username/password is incorrect')
-    registration()  # Add registration option if login fails
+    registration()  
 elif authentication_status == None:
     st.warning('Please enter your username and password')
-    registration()  # Add registration option if no login attempt is made
+    registration()
