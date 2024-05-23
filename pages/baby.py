@@ -7,12 +7,7 @@ from datetime import datetime, timedelta
 from github_contents import GithubContents
 
 def show():
-    github = GithubContents(
-            st.secrets["github"]["owner"],
-            st.secrets["github"]["repo"],
-            st.secrets["github"]["token"])st.title("Baby Page")
-    # Your baby page code
-    file_suffix = "some_unique_identifier"  # Replace with actual suffix logic
+    file_suffix = username
     st.header('Baby :ship:')
     st.subheader('Ideen Babyname')
     baby_name_text = st.text_area("Babyname")
