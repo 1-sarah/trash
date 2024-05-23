@@ -1,4 +1,5 @@
 import yaml
+import bcrypt
 import streamlit as st
 from yaml.loader import SafeLoader
 import streamlit_authenticator as stauth
@@ -119,20 +120,32 @@ authenticator = stauth.Authenticate(
 )
 
 def registration():
-    st.subheader("Registrierung")
-    new_username = st.text_input("Neuer Benutzername")
-    new_password = st.text_input("Neues Passwort", type="password")
+    st.header("Registration")
+    new_username = st.text_input("New Username")
+    new_password = st.text_input("New Password", type="password")
 
-    if st.button("Registrierung"):
+    if st.button("Register"):
+        # Load existing credentials from YAML
+        with open('./config.yaml', 'r') as file:
+            config = yaml.load(file, Loader=SafeLoader)
+
         # Check if username already exists
         if new_username in config['credentials']:
-            st.error("Benutzername existiert bereits. Bitte versuchen Sie einen Anderen.")
+            st.error("Username already exists. Please choose a different one.")
         else:
-            # Add new user to YAML file
-            config['credentials'][new_username] = new_password
+            # Hash the password
+            hashed_password = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+
+            # Add new user to YAML file with hashed password
+            config['credentials'][new_username] = {
+                'email': '',  # You can add email field if needed
+                'name': '',   # You can add name field if needed
+                'password': hashed_password
+            }
             with open('./config.yaml', 'w') as file:
                 yaml.dump(config, file)
             st.success("Registration successful. You can now login.")
+
 
 name, authentication_status, username = authenticator.login()
 
