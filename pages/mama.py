@@ -7,24 +7,6 @@ from datetime import datetime, timedelta
 from github_contents import GithubContents
 
 def show():
-    # Verbindung zu GitHub initialisieren
-    github = GithubContents(
-                st.secrets["github"]["owner"],
-                st.secrets["github"]["repo"],
-                st.secrets["github"]["token"])
-
-    with open('./config.yaml') as file:
-        config = yaml.load(file, Loader=SafeLoader)
-
-    # Authenticator
-    authenticator = stauth.Authenticate(
-        config['credentials'],
-        config['cookie']['name'],
-        config['cookie']['key'],
-        config['cookie']['expiry_days'],
-        config['preauthorized']
-    )
-
     def main(username):
         st.write(f'Welcome *{username}*')
     
