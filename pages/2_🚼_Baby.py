@@ -94,10 +94,10 @@ authenticator = stauth.Authenticate(
 # Authentication and visualizing the elements
 name, authentication_status, username = authenticator.login()
 if authentication_status:
-    authenticator.logout('Logout', 'main')
-    st.write(f'Welcome *{name}*')
+    authenticator.logout('Ausloggen', 'main')
+    st.subheader(f'Willkommen *{username}*')
     baby_main(username)
 elif authentication_status == False:
-    st.error('Username/password is incorrect')
+    st.error('Benutzername/Passwort ist inkorrekt')
 elif authentication_status == None:
-    st.warning('Please enter your username and password')
+    st.warning('Bitte loggen Sie sich ein.')
