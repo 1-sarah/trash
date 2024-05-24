@@ -5,38 +5,6 @@ import streamlit_authenticator as stauth
 import pandas as pd
 from datetime import datetime, timedelta
 from github_contents import GithubContents
-import toml
-
-# Define the content for config.toml
-config_data = {
-    'params': {
-        'customCSS': ["custom.css"]
-    }
-}
-
-with open('config.toml', 'w') as config_file:
-    toml.dump(config_data, config_file)
-
-# Define the content for custom.css
-css_content = """
-body {
-    background-color: #E6E6FA; /* Pastel violet */
-    font-family: 'Comic Sans MS', cursive, sans-serif; /* Example of a soft font */
-    color: #333333; /* Optional: a soft text color */
-}
-
-h1, h2, h3, h4, h5, h6 {
-    font-family: 'Comic Sans MS', cursive, sans-serif;
-}
-
-p {
-    font-family: 'Comic Sans MS', cursive, sans-serif;
-}
-"""
-
-# Write the custom.css file
-with open('custom.css', 'w') as css_file:
-    css_file.write(css_content)
 
 github = GithubContents(
             st.secrets["github"]["owner"],
