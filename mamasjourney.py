@@ -41,7 +41,7 @@ def registration():
                 yaml.dump(config, file)
             st.success("Registration successful. You can now login.")
 
-from pages import 👩_Mama,🚼_Baby,📈_Statistiken,🔗_Links
+from pages import mama,baby,statistiken,links
 page_names_to_funcs = {
     "👩_Mama": mama,
     "🚼_Baby": baby,
