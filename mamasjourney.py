@@ -60,6 +60,11 @@ def registration():
 if 'login_page' not in st.session_state:
     st.session_state.login_page = 'login'  # Default to login page
 
+# Check if redirected from another page
+if 'navigate_to_login' in st.session_state and st.session_state.navigate_to_login:
+    st.session_state.login_page = 'login'
+    del st.session_state.navigate_to_login
+
 # Add a toggle widget for switching between login and registration
 st.sidebar.title("Authentication")
 toggle = st.sidebar.radio("Choose an option", ('Login', 'Register'))
