@@ -42,7 +42,6 @@ def registration():
             st.success("Registration successful. You can now login.")
                     
 page_names_to_funcs = {
-    "mamasjourney": mamasjourney,
     "1_👩‍🍼_Mama": mama,
     "2_🚼_Baby": baby,
     "3_📈_Statistiken": statistiken,
