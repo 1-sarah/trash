@@ -1,21 +1,22 @@
-import yaml
-import bcrypt
 import streamlit as st
-from yaml.loader import SafeLoader
-import streamlit_authenticator as stauth
+import yaml
 import pandas as pd
 from datetime import datetime, timedelta
+from yaml.loader import SafeLoader
+import streamlit_authenticator as stauth
 from github_contents import GithubContents
 
-# Verbindung zu GitHub initialisieren
+# Load secrets
 github = GithubContents(
-            st.secrets["github"]["owner"],
-            st.secrets["github"]["repo"],
-            st.secrets["github"]["token"])
+    st.secrets["github"]["owner"],
+    st.secrets["github"]["repo"],
+    st.secrets["github"]["token"]
+)
 
+# Function to handle the main application logic
 def main(username):
     st.write(f'Welcome *{username}*')
-    
+
     def load_last_period_date(file_suffix):
         try:
             data = github.read_json(f"last_period_date_{file_suffix}.json")
@@ -32,11 +33,10 @@ def main(username):
         due_date = last_period_date + gestation_period
         return due_date
 
-
     calendar_weeks_data = {
         'Kalenderwoche': list(range(1, 41)),
         'Ereignis': ['Ultraschall', 'Arztbesuch', 'Ernährungsberatung', 'Geburtsvorbereitungskurs', 'Ruhestunde'] * 8
-    } 
+    }
 
     st.title("mamasjourney :ship:")
 
@@ -107,6 +107,7 @@ def main(username):
     else:
         st.write("Noch keine Tagebucheinträge vorhanden.")
 
+# Load configuration
 with open('./config.yaml') as file:
     config = yaml.load(file, Loader=SafeLoader)
 
@@ -119,34 +120,6 @@ authenticator = stauth.Authenticate(
     config['preauthorized']
 )
 
-def registration():
-    st.header("Registration")
-    new_username = st.text_input("New Username")
-    new_password = st.text_input("New Password", type="password")
-
-    if st.button("Register"):
-        # Load existing credentials from YAML
-        with open('./config.yaml', 'r') as file:
-            config = yaml.load(file, Loader=SafeLoader)
-
-        # Check if username already exists
-        if new_username in config['credentials']['usernames']:
-            st.error("Username already exists. Please choose a different one.")
-        else:
-            # Hash the password
-            hashed_password = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
-
-            # Add new user to YAML file with hashed password
-            config['credentials']['usernames'][new_username] = {
-                'email': '',  # You can add email field if needed
-                'name': '',   # You can add name field if needed
-                'password': hashed_password
-            }
-            with open('./config.yaml', 'w') as file:
-                yaml.dump(config, file)
-            st.success("Registration successful. You can now login.")
-
-
 name, authentication_status, username = authenticator.login()
 
 if authentication_status:
@@ -154,7 +127,5 @@ if authentication_status:
     main(username)
 elif authentication_status == False:
     st.error('Username/password is incorrect')
-    registration()  
 elif authentication_status == None:
     st.warning('Please enter your username and password')
-    registration()
