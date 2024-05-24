@@ -3,16 +3,16 @@ import streamlit as st
 from yaml.loader import SafeLoader
 import streamlit_authenticator as stauth
 import pandas as pd
-from datetime import datetime, timedelta
+from datetime import datetime
 from github_contents import GithubContents
 
 # Verbindung zu GitHub initialisieren
 github = GithubContents(
-            st.secrets["github"]["owner"],
-            st.secrets["github"]["repo"],
-            st.secrets["github"]["token"])
+    st.secrets["github"]["owner"],
+    st.secrets["github"]["repo"],
+    st.secrets["github"]["token"])
 
-# Liste der Fruchtgrössen
+# Liste der Fruchtgroessen
 fruchtgroessen = [
     ("4 Wochen", "Mohnsamen"),
     ("5 Wochen", "Sesamsamen"),
@@ -53,10 +53,35 @@ fruchtgroessen = [
     ("40 Wochen", "Kürbis"),
 ]
 
+# Define the switch_page function
+def switch_page(page_name: str):
+    from streamlit import _RerunData, _RerunException
+    from streamlit.source_util import get_pages
+
+    def standardize_name(name: str) -> str:
+        return name.lower().replace("_", " ")
+    
+    page_name = standardize_name(page_name)
+
+    pages = get_pages("mamasjourney.py")  # Use your main page's filename
+
+    for page_hash, config in pages.items():
+        if standardize_name(config["page_name"]) == page_name:
+            raise _RerunException(
+                _RerunData(
+                    page_script_hash=page_hash,
+                    page_name=page_name,
+                )
+            )
+
+    page_names = [standardize_name(config["page_name"]) for config in pages.values()]
+
+    raise ValueError(f"Could not find page {page_name}. Must be one of {page_names}")
+
 # Main definieren mit allen gewünschten Funktionen
 def baby_main(username):
     file_suffix = username
-    st.header(':blue[Baby] :ship:')
+    st.header('Baby :ship:')
     st.subheader('Ideen Babyname')
     babyname_date = st.date_input("Datum", value=datetime.today(), max_value=datetime.today(), format="YYYY/MM/DD")
     babyname_text = st.text_area("Babyname")
@@ -92,12 +117,18 @@ authenticator = stauth.Authenticate(
 )
 
 # Authentication and visualizing the elements
-name, authentication_status, username = authenticator.login()
+name, authentication_status, username = authenticator.login('Login', 'main')
 if authentication_status:
-    authenticator.logout('Ausloggen', 'main')
-    st.subheader(f'Willkommen *{file_suffix}*')
+    authenticator.logout('Logout', 'main')
+    st.write(f'Welcome *{name}*')
     baby_main(username)
 elif authentication_status == False:
-    st.error('Benutzername/Passwort ist inkorrekt')
+    st.error('Username/password is incorrect')
+    st.write("Please log in first to access this page.")
+    if st.button("Go to Main Page"):
+        switch_page("mamasjourney")
 elif authentication_status == None:
-    st.warning('Bitte loggen Sie sich ein.')
+    st.warning('Please enter your username and password')
+    st.write("Please log in first to access this page.")
+    if st.button("Go to Main Page"):
+        switch_page("mamasjourney")
