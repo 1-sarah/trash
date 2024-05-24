@@ -3,14 +3,14 @@ import streamlit as st
 from yaml.loader import SafeLoader
 import streamlit_authenticator as stauth
 import pandas as pd
-from datetime import datetime, timedelta
+from datetime import datetime
 from github_contents import GithubContents
 
 # Verbindung zu GitHub initialisieren
 github = GithubContents(
-            st.secrets["github"]["owner"],
-            st.secrets["github"]["repo"],
-            st.secrets["github"]["token"])
+    st.secrets["github"]["owner"],
+    st.secrets["github"]["repo"],
+    st.secrets["github"]["token"])
 
 # Liste der Fruchtgrössen
 fruchtgroessen = [
@@ -99,5 +99,13 @@ if authentication_status:
     baby_main(username)
 elif authentication_status == False:
     st.error('Username/password is incorrect')
+    st.write("Please log in first to access this page.")
+    if st.button("Go to Main Page"):
+        st.session_state.login_page = 'login'
+        st.experimental_rerun()
 elif authentication_status == None:
     st.warning('Please enter your username and password')
+    st.write("Please log in first to access this page.")
+    if st.button("Go to Main Page"):
+        st.session_state.login_page = 'login'
+        st.experimental_rerun()
