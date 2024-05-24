@@ -53,6 +53,31 @@ fruchtgroessen = [
     ("40 Wochen", "Kürbis"),
 ]
 
+# Define the switch_page function
+def switch_page(page_name: str):
+    from streamlit import _RerunData, _RerunException
+    from streamlit.source_util import get_pages
+
+    def standardize_name(name: str) -> str:
+        return name.lower().replace("_", " ")
+    
+    page_name = standardize_name(page_name)
+
+    pages = get_pages("mamasjourney.py")  # Use your main page's filename
+
+    for page_hash, config in pages.items():
+        if standardize_name(config["page_name"]) == page_name:
+            raise _RerunException(
+                _RerunData(
+                    page_script_hash=page_hash,
+                    page_name=page_name,
+                )
+            )
+
+    page_names = [standardize_name(config["page_name"]) for config in pages.values()]
+
+    raise ValueError(f"Could not find page {page_name}. Must be one of {page_names}")
+
 # Main definieren mit allen gewünschten Funktionen
 def baby_main(username):
     file_suffix = username
@@ -92,7 +117,7 @@ authenticator = stauth.Authenticate(
 )
 
 # Authentication and visualizing the elements
-name, authentication_status, username = authenticator.login()
+name, authentication_status, username = authenticator.login('Login', 'main')
 if authentication_status:
     authenticator.logout('Logout', 'main')
     st.write(f'Welcome *{name}*')
@@ -101,11 +126,9 @@ elif authentication_status == False:
     st.error('Username/password is incorrect')
     st.write("Please log in first to access this page.")
     if st.button("Go to Main Page"):
-        st.session_state.navigate_to_login = True
-        st.experimental_rerun()
+        switch_page("mamasjourney")
 elif authentication_status == None:
     st.warning('Please enter your username and password')
     st.write("Please log in first to access this page.")
     if st.button("Go to Main Page"):
-        st.session_state.navigate_to_login = True
-        st.experimental_rerun()
+        switch_page("mamasjourney")
