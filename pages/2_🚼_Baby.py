@@ -56,7 +56,7 @@ fruchtgroessen = [
 # Main definieren mit allen gewünschten Funktionen
 def baby_main(username):
     file_suffix = username
-    st.header('Baby :ship:')
+    st.header(':blue[Baby] :ship:')
     st.subheader('Ideen Babyname')
     babyname_date = st.date_input("Datum", value=datetime.today(), max_value=datetime.today(), format="YYYY/MM/DD")
     babyname_text = st.text_area("Babyname")
@@ -95,7 +95,7 @@ authenticator = stauth.Authenticate(
 name, authentication_status, username = authenticator.login()
 if authentication_status:
     authenticator.logout('Ausloggen', 'main')
-    st.subheader(f'Willkommen *{username}*')
+    st.subheader(f'Willkommen *{file_suffix}*')
     baby_main(username)
 elif authentication_status == False:
     st.error('Benutzername/Passwort ist inkorrekt')
