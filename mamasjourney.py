@@ -6,6 +6,8 @@ import pandas as pd
 from datetime import datetime, timedelta
 from github_contents import GithubContents
 
+st.set_page_config(page_title='mamasjourney', page_icon=':ship:', layout='wide', initial_sidebar_state= 'auto')
+
 github = GithubContents(
             st.secrets["github"]["owner"],
             st.secrets["github"]["repo"],
@@ -38,6 +40,19 @@ def registration():
             with open('./config.yaml', 'w') as file:
                 yaml.dump(config, file)
             st.success("Registration successful. You can now login.")
+                    
+page_names_to_funcs = {
+    "mamasjourney": mamasjourney,
+    "1_👩‍🍼_Mama": mama,
+    "2_🚼_Baby": baby,
+    "3_📈_Statistiken": statistiken,
+    "4_🔗_Links": links
+}   
+def main(username):
+    st.sidebar.success('')
+    page_name = st.sidebar.selectbox("Wählen Sie eine Seite", page_names_to_funcs.keys())
+    page_names_to_funcs[page_name]()
+         
 
 name, authentication_status, username = authenticator.login()
 
