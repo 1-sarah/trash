@@ -70,8 +70,8 @@ elif toggle == 'Register':
     st.session_state.login_page = 'register'
 
 if st.session_state.login_page == 'login':
-    name, authentication_status, username = authenticator.login('Login', 'main')
-    
+    name, authentication_status, username = authenticator.login()
+
     if authentication_status:
         st.session_state.logged_in = True
         st.session_state.username = username
