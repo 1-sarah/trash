@@ -33,16 +33,16 @@ authenticator = stauth.Authenticate(
 )
 
 def registration():
-    st.header("Registration")
-    new_username = st.text_input("New Username")
-    new_password = st.text_input("New Password", type="password")
+    st.header("Registrierung")
+    new_username = st.text_input("Neuer Benutzername")
+    new_password = st.text_input("Neues Passwort", type="password")
 
-    if st.button("Register"):
+    if st.button("Registrierung"):
         config = load_config()  # Reload configuration
 
         # Check if username already exists
         if new_username in config['credentials']['usernames']:
-            st.error("Username already exists. Please choose a different one.")
+            st.error("Benutzername existiert bereits. Bitte wählen Sie einen Anderen.")
         else:
             # Hash the password
             hashed_password = bcrypt.hashpw(new_password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
@@ -54,7 +54,7 @@ def registration():
                 'password': hashed_password
             }
             save_config(config)  # Save updated configuration
-            st.success("Registration successful. You can now login.")
+            st.success("Registration erfolgreich. Sie können sich nun einloggen.")
 
 # Toggle between login and registration
 if 'login_page' not in st.session_state:
@@ -66,12 +66,12 @@ if 'navigate_to_login' in st.session_state and st.session_state.navigate_to_logi
     del st.session_state.navigate_to_login
 
 # Add a toggle widget for switching between login and registration
-st.sidebar.title("Authentication")
-toggle = st.sidebar.radio("Choose an option", ('Login', 'Register'))
+st.sidebar.title("Authentifizierung")
+toggle = st.sidebar.radio("Wähle eine Option", ('Registrierung', 'Login'))
 
 if toggle == 'Login':
     st.session_state.login_page = 'login'
-elif toggle == 'Register':
+elif toggle == 'Registrierung':
     st.session_state.login_page = 'register'
 
 if st.session_state.login_page == 'login':
@@ -80,16 +80,16 @@ if st.session_state.login_page == 'login':
     if authentication_status:
         st.session_state.logged_in = True
         st.session_state.username = username
-        st.write(f"Welcome, {username}!")
-        if st.button("Logout"):
+        st.subheader(f"Willkommen, {username}!")
+        if st.button("Ausloggen"):
             authenticator.logout('Logout', 'sidebar')
             st.session_state.logged_in = False
             st.session_state.username = None
             st.experimental_rerun()
     elif authentication_status == False:
-        st.error('Username/password is incorrect')
+        st.error('Benutzername/Passwort ist inkorrekt.')
     elif authentication_status == None:
-        st.warning('Please enter your username and password')
+        st.warning('Bitte geben sie ihr Benutzername und Passwort ein.')
 
 elif st.session_state.login_page == 'register':
     registration()
