@@ -12,7 +12,7 @@ github = GithubContents(
     st.secrets["github"]["repo"],
     st.secrets["github"]["token"])
 
-# Liste der Fruchtgrössen
+# Liste der Fruchtgroessen
 fruchtgroessen = [
     ("4 Wochen", "Mohnsamen"),
     ("5 Wochen", "Sesamsamen"),
@@ -101,11 +101,11 @@ elif authentication_status == False:
     st.error('Username/password is incorrect')
     st.write("Please log in first to access this page.")
     if st.button("Go to Main Page"):
-        st.session_state.login_page = 'login'
+        st.session_state.navigate_to_login = True
         st.experimental_rerun()
 elif authentication_status == None:
     st.warning('Please enter your username and password')
     st.write("Please log in first to access this page.")
     if st.button("Go to Main Page"):
-        st.session_state.login_page = 'login'
+        st.session_state.navigate_to_login = True
         st.experimental_rerun()
