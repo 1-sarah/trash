@@ -72,7 +72,11 @@ if st.session_state.login_page == 'login':
         st.session_state.logged_in = True
         st.session_state.username = username
         st.write(f"Welcome, {username}!")
-        # You can add a redirect or further actions here
+        if st.button("Logout"):
+            authenticator.logout('Logout', 'sidebar')
+            st.session_state.logged_in = False
+            st.session_state.username = None
+            st.experimental_rerun()
     elif authentication_status == False:
         st.error('Username/password is incorrect')
     elif authentication_status == None:
