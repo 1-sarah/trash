@@ -56,14 +56,14 @@ def registration():
             save_config(config)  # Save updated configuration
             st.success("Registration erfolgreich. Sie können sich nun einloggen.")
 
-# Toggle between login and registration
-if 'login_page' not in st.session_state:
-    st.session_state.login_page = 'login'  # Default to login page
-
 # Check if redirected from another page
 if 'navigate_to_login' in st.session_state and st.session_state.navigate_to_login:
     st.session_state.login_page = 'login'
     del st.session_state.navigate_to_login
+
+# Toggle between login and registration
+if 'login_page' not in st.session_state:
+    st.session_state.login_page = 'login'  # Default to login page
 
 # Add a toggle widget for switching between login and registration
 st.sidebar.title("Authentifizierung")
