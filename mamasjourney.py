@@ -52,9 +52,18 @@ def registration():
                 yaml.dump(config, file)
             st.success("Registration successful. You can now login.")
 
-# Choose between login and registration
+# Toggle between login and registration
 if 'login_page' not in st.session_state:
     st.session_state.login_page = 'login'  # Default to login page
+
+# Add a toggle widget for switching between login and registration
+st.sidebar.title("Authentication")
+toggle = st.sidebar.radio("Choose an option", ('Login', 'Register'))
+
+if toggle == 'Login':
+    st.session_state.login_page = 'login'
+elif toggle == 'Register':
+    st.session_state.login_page = 'register'
 
 if st.session_state.login_page == 'login':
     name, authentication_status, username = authenticator.login()
@@ -62,19 +71,12 @@ if st.session_state.login_page == 'login':
     if authentication_status:
         st.session_state.logged_in = True
         st.session_state.username = username
-        st.experimental_rerun()  # Redirect to the first page
+        st.write(f"Welcome, {username}!")
+        # You can add a redirect or further actions here
     elif authentication_status == False:
         st.error('Username/password is incorrect')
     elif authentication_status == None:
         st.warning('Please enter your username and password')
 
-    st.button("Register", on_click=lambda: st.session_state.update(login_page='register'))
-
 elif st.session_state.login_page == 'register':
     registration()
-    st.button("Back to Login", on_click=lambda: st.session_state.update(login_page='login'))
-
-# Redirect to the first page if logged in
-if 'logged_in' in st.session_state and st.session_state.logged_in:
-    st.experimental_rerun()
-
