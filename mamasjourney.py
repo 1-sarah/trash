@@ -13,8 +13,15 @@ github = GithubContents(
 )
 
 # Load configuration
-with open('./config.yaml') as file:
-    config = yaml.load(file, Loader=SafeLoader)
+def load_config():
+    with open('./config.yaml', 'r') as file:
+        return yaml.load(file, Loader=SafeLoader)
+
+def save_config(config):
+    with open('./config.yaml', 'w') as file:
+        yaml.dump(config, file)
+
+config = load_config()
 
 # Authenticator
 authenticator = stauth.Authenticate(
@@ -31,9 +38,7 @@ def registration():
     new_password = st.text_input("New Password", type="password")
 
     if st.button("Register"):
-        # Load existing credentials from YAML
-        with open('./config.yaml', 'r') as file:
-            config = yaml.load(file, Loader=SafeLoader)
+        config = load_config()  # Reload configuration
 
         # Check if username already exists
         if new_username in config['credentials']['usernames']:
@@ -48,8 +53,7 @@ def registration():
                 'name': '',   # You can add name field if needed
                 'password': hashed_password
             }
-            with open('./config.yaml', 'w') as file:
-                yaml.dump(config, file)
+            save_config(config)  # Save updated configuration
             st.success("Registration successful. You can now login.")
 
 # Toggle between login and registration
@@ -66,7 +70,7 @@ elif toggle == 'Register':
     st.session_state.login_page = 'register'
 
 if st.session_state.login_page == 'login':
-    name, authentication_status, username = authenticator.login()
+    name, authentication_status, username = authenticator.login('Login', 'main')
     
     if authentication_status:
         st.session_state.logged_in = True
